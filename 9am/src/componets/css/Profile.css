@@ -1,0 +1,168 @@
+/* Profile.css */
+
+/* General Profile Container */
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Header (User Info) */
+  .profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile-header h1 {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  /* Categories Section */
+  .categories-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #444;
+  }
+  
+  .categories-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .category-item:hover {
+    background-color: #e1e1e1;
+  }
+  
+  .category-name {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.3s;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Add Category Section */
+  .add-category-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+  
+  .add-category-container .category-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    outline: none;
+  }
+  
+  .add-btn, .cancel-btn {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .add-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .cancel-btn {
+      background-color: #ed2727;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+    .cancel-btn:hover {
+      background-color: #cf5050;
+    }
+
+.profile-form{
+  margin: 10px;
+  margin-top: 19px;
+}
+
+.profile-form select{
+  margin-left: 5px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 150px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  outline: none;
+}
+  
+  /* Logout Button */
+  .logout-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 30px;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 20px;
+    }
+  
+    .add-category-container .category-input {
+      max-width: 100%;
+    }
+  
+    .categories-list {
+      padding-left: 20px;
+    }
+  }
+  

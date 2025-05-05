@@ -1,0 +1,28 @@
+.admincontainermain{
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admincontainersub input{
+    padding: 5px;
+    border-radius: 4px;
+    margin: 10px;
+    margin-top: 5px;
+    outline: none;
+    font-size: medium;
+    border : 1px solid #ccc;
+    width: 97%;
+}
+
+.recordcontianersub button{
+    margin-inline: 0px;
+}
+
+
+
+.recordcontianersub button:hover {
+    color: #ccc;
+    background-color: #333;
+}

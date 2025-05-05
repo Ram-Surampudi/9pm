@@ -1,0 +1,159 @@
+.recordcontianermain{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center; 
+    padding: 10px;
+    /* background-color: #D3F1DF; */
+}
+
+.recordcontianersub{
+    margin: 20px;
+    padding: 40px;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recordcontianersub p{
+    font-size: 2rem;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.recordcontianersub select{
+    display: inline;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.recordcontianersub button, .recordcontianersub select, .yearinputele {
+    padding: 5px;
+    background-color: #F1F1F1;
+    outline: none;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    color: #333;
+    font: inherit;
+    font-weight: 600;
+    font-size: medium;
+    width: 100%;
+    border: 1px solid #ccc;
+    text-transform: uppercase;
+}
+
+.yearinputele{
+    margin-bottom: 10px;
+}
+
+td select {
+    padding: 5px;
+    margin: 0px;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    font: inherit;
+    font-size: medium;
+    width: 100%;
+}
+
+.recordcontianersub label{
+    text-transform: uppercase;
+    margin: 10px;
+    padding: 3px;
+    font-size: medium;
+}
+
+.customtoast{
+    text-transform: capitalize;
+}
+
+.exceld{
+    margin:10px auto;
+    /* margin: auto; */
+    font: inherit;
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    align-items: flex-end;
+}
+
+.exceld > button{
+    padding: 6px 10px;
+    text-align: center;
+    text-transform: uppercase;
+    font: inherit;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+table {
+    width: 60%;
+    border-collapse: collapse;
+    margin: 30px auto;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    text-transform: capitalize;
+}
+th {
+    background-color: #f4f4f4;
+    /* font-weight: bold; */
+    text-transform: uppercase;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Media query for phone devices */
+@media (max-width: 768px) {
+    table {
+        width: 90%;
+        font-size: 10px;
+    }
+    th, td {
+        padding: 5px;
+        white-space: nowrap;
+    }
+    .recordcontianermain{
+        margin-inline: 30px;
+    }
+    .recordcontianersub p{
+        font-size: large;
+    }
+    .recordcontianersub label{
+        font-size:small;
+        margin: 5px;
+    }
+
+    .recordcontianersub select * {
+        font-size: small;
+        max-width: 100px;
+    }
+    .customtoast{
+        font-size: 12px;
+    }
+    .exceld{
+        width: 90%;
+    } 
+    .exceld > button{
+        font-size: 10px;
+        padding: 5px;
+        margin-top:20px;
+    }
+}
+
+
