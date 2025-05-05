@@ -2,14 +2,15 @@
 
 /* General Profile Container */
 .profile-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-  }
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  margin-top: 3rem;
+}
   
   /* Header (User Info) */
   .profile-header {
@@ -19,8 +20,10 @@
   
   .profile-header h1 {
     color: #333;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: left;
+    margin-bottom: 7px;
   }
   
   /* Categories Section */

@@ -30,8 +30,6 @@ const Register = () => {
         tmc += item.money_credited;
         tu += item.usage;
       });
-      console.log(res.data);
-      
       setToatalMoneyCredited(tmc);
       setTotalUsage(tu);
     }
@@ -42,8 +40,8 @@ const Register = () => {
         setData(null);
         toast.error("No Records Found");
       }
-      setLoading(false);
     }
+    setLoading(false);
   }
 
    useEffect(()=>{
@@ -85,7 +83,7 @@ const excelFile = async () =>{
                 <td>{e.year}</td>
                 <td>{months[e.month-1]}</td>
                 <td>{e.money_credited?.toLocaleString('en-US')}</td>
-                {catetories?.map((item, index)=>(<td key={index}>{e.catetories && e.catetories[item]?.toLocaleString('en-US') || 0}</td>))}
+                {catetories?.map((item, index)=>(<td key={index}>{e.catetories && (e.catetories[item]?.toLocaleString('en-US') || 0)}</td>))}
                 <td>{e.usage?.toLocaleString('en-US')}</td>
                 <td>{e.balance?.toLocaleString('en-US')}</td>
             </tr>

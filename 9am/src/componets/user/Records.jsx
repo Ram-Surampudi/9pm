@@ -83,7 +83,7 @@ const Records = () => {
       <button onClick={fetchRecords}>search</button>
     </div>
     </div>
-    {data &&
+    {data ?
     <div>
       <h2 className="transcationstableh2" >{MONTHS[tempMonth-1]} {tempYear} Records</h2>
       <p className="totalvaluesclass" >TOTAL USAGE : <strong>{total.toLocaleString('en-US')}</strong></p>
@@ -112,7 +112,7 @@ const Records = () => {
         </tbody>
     </table>
     </div>
-  }
+  : <p style={{textAlign:"center", marginTop:"10px", fontSize:"1.5rem"}}>{MONTHS[tempMonth-1]} {tempYear} No Records Found</p>}
     </div>
   )
 }

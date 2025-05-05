@@ -69,12 +69,15 @@ const Profile = () => {
             navigate("/logout");
             toast.error(error.response.data.msg);
         }
+        setCats('');
+        setBool(false);
         setLoading(false);
     }
 
     return (
         <div className="profile-container">
             {loading && <Loading />}
+            <h2 className="categories-title">Information:</h2>
             <div className="profile-header">
                 <h1>Email: {email}</h1>
                 <h1>Name: {name}</h1>

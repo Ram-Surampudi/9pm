@@ -34,7 +34,7 @@ router.delete("/delete",authenticateToken, async (req, res)=>{
       const catetories = req.body.catetories;
       user.catetories = catetories;
       await user.save();
-        res.status(200).json({msg : "Sucessfully added", catetories});
+        res.status(200).json({msg : "Sucessfully updated", catetories});
     }
     catch (error) {
       res.status(200).json({msg : "unable process request"});

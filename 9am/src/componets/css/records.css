@@ -11,6 +11,7 @@
     padding: 40px;
     border-radius: 20px;
     background-color: white;
+    max-width: 340px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 

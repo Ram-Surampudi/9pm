@@ -147,7 +147,7 @@ const EditableTable = () => {
   };
 
   const getRecords = async () =>{
-    if(year < 2000 || year > 2100){
+    if(isNaN(year) || year < 2000 || year > 2200){
       toast.error("Please select a valid year");
       return;
     }
@@ -186,7 +186,7 @@ const EditableTable = () => {
           {Array.from(yearList).map((item, index)=>(<option key={index} value={item}>{item}</option>))}
           </select>
           <label>Year(optional):</label>
-          <input className="yearinputele" type="number" min="2000" value={year} onChange={(e)=>setYear(parseInt(e.target.value))} max="2100"></input>
+          <input className="yearinputele" type="number" min="2000" value={year} onChange={(e)=>setYear(parseInt(e.target.value))} max="2200"></input>
       </div>
       <div>
         <label>Month:</label>
