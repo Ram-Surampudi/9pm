@@ -123,12 +123,17 @@
   }
 
   @media (max-width: 768px) {
+    .outterdivtable{
+      overflow: scroll;
+      margin-inline: 15px;
+    }
     .actionstableelements{
       width: 70%;
+      overflow: scroll;
     }
     .totalvaluesclass{
       margin-top: 10px;
       margin-left: 8%;
-      font-size: medium;
+      font-size: 17px;
     }
   }

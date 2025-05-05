@@ -38,7 +38,10 @@ const Login = () => {
       navigate('/user/home');
    }
    catch(error){
-    toast.error(error?.response?.data || "An error occured");
+    if(error?.response){
+      toast.error(error?.response?.data || "An error occured");
+    }
+    else toast.error("An error occured");
    }
    setLoading(false);
   }

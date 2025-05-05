@@ -33,7 +33,7 @@ const EditableTable = () => {
 
   const [yearList , setYearList] = useState(years);  
 
-  const [data, setData] = useState(null);
+  let [data, setData] = useState(null);
   const [toggle , setToggle] = useState(false);
   const [ibr, setIbr] = useState(false);
   const [newRow, setNewRow] = useState(temp);
@@ -45,7 +45,11 @@ const EditableTable = () => {
   const navigate = useNavigate();
 
   const set = e => setInsertRow({...insertRow, [e.target.name]:e.target.value});
-  const handleDelete = (id) => setData((prevData) => prevData.filter((row) => row._id !== id));
+  const handleDelete = async (id) =>{
+    data = data.filter((row) => row._id !== id);
+    setData(data);
+    if(toggle) await handleUpdatedb();
+  } 
   const handleInputChange = e => setNewRow({...newRow, [e.target.name] : e.target.value});
 
   const calculateBalance = (row , index) =>{
@@ -57,7 +61,7 @@ const EditableTable = () => {
     return String(d.getDate()).padStart(2, '0')+ '-' + (d.getMonth()+1) + '-'+ d.getFullYear();
   }
   
-  const handleInsert = (e) => {
+  const handleInsert = async (e) => {
     if(!insertRow.description || !(insertRow.credit || insertRow.debit)){
       toast.error("Please fill all the fields");
       return;
@@ -72,11 +76,15 @@ const EditableTable = () => {
     calculateBalance(insertRow,data ? data?.length : 0);
     if(data !== null){
       data.push(insertRow);
-      setData(data);
+      setData([...data]);
     }
-    else setData([insertRow]);
+    else{
+      data = [insertRow]
+      setData(data);
+    } 
     setInsertRow({...temp, date:`${tempYear}-${String(tempMonth).padStart(2,'0')}-01`});
     setTotal(data?.reduce((tot, current)=>tot+parseInt(current.debit || 0), 0) || 0);
+    if(toggle) await handleUpdatedb();
   }
   catch(error){
     console.log(error);
@@ -100,10 +108,11 @@ const EditableTable = () => {
 
   const handleEdit = (_id, row) => {
     setEditRowId(_id);
-    setNewRow(row);
+    console.log(row.date);
+    setNewRow({...row, date:row.date.split("T")[0]});
   };
 
-  const handleSave = (index) => {
+  const handleSave = async (index) => {
       setEditRowId(null);
       data[index] = newRow;
       if(ibr) setIbr(false);
@@ -113,16 +122,20 @@ const EditableTable = () => {
       }
       setData(data);
       setNewRow(temp);
+      console.log(toggle);
+      
+      if(toggle) await handleUpdatedb();
   };
   
-  const handleUpdatedb = async (e) =>{
-    e.preventDefault();
-    if(year < 2000 || year > 2100){
+  const handleUpdatedb = async () =>{
+    if(isNaN(year) || year < 2000 || year > 2100){
       toast.error("Please select a valid year");
       return;
     }
     setLoading(true);
     try{
+      console.log(data);
+      
       data?.forEach(item => {
         delete item._id;
         item.credit = parseInt(item.credit);
@@ -134,8 +147,11 @@ const EditableTable = () => {
         saveToStore("user", {...localuser, years});
       }
       const token = getFromStore("information");
-       const res = await axios.post(`${URL}/api/records/crud`,{month, year, balance, transactions :data}, {headers: {Authorization:token,},});
+      console.log(data);
+      
+       const res = await axios.post(`${URL}/api/records/crud`,{month:tempMonth, year:tempYear, balance, transactions :data}, {headers: {Authorization:token,},});
        toast.success("Updated Sucessfully");
+       console.log(res?.data.transactions);
        setData(res?.data.transactions);
     }
     catch(error){
@@ -208,7 +224,8 @@ const EditableTable = () => {
       <button onClick={getRecords} >search</button>
     </div>
     </div>
-          <h2 className="transcationstableh2" >{MONTHS[tempMonth-1]} {tempYear} Records</h2>      <div className="selfOrAuto">
+          <h2 className="transcationstableh2" >{MONTHS[tempMonth-1]} {tempYear} Records</h2>      
+          <div className="selfOrAuto">
           <div className="toggle-container">
             <span id="toggle-status">Auto Save </span>
             <div className={"toggle " + (toggle ? "active" : "")} id="toggle" onClick={(e)=>setToggle(!toggle)}></div>
@@ -221,78 +238,80 @@ const EditableTable = () => {
         <p>total Usage : {total?.toLocaleString('en-US')}</p>
       </div>
 
-      <table className="actionstableelements">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Item</th>
-            <th>Category</th>
-            <th>Quantity</th>
-            <th>credit</th>
-            <th>debit</th>
-            <th>balance</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          {data?.map((row, index) => (
-            editRowId !== row._id ?
-            <tr key={row._id}>
-              <td>{formateDate(row.date)}</td>
-              <td>{row.description}</td>
-              <td>{row?.category || "usage"}</td>
-              <td>{row.quantity}</td>
-              <td>{row.credit?.toLocaleString('en-US')}</td>
-              <td>{row.debit?.toLocaleString('en-US')}</td>
-              <td>{row.balance?.toLocaleString('en-US')}</td>
-              <td className="actionbuttons">
-                <button className="tablebutton edit" onClick={() => handleEdit(row._id, row)}></button>
-                <button className="tablebutton insertabove" onClick={() => handleInsertAbove(index)}>&#8624;</button>
-                <button className="tablebutton" onClick={() => handleDelete(row._id)}>&#10060;</button>
-              </td>
-            </tr> 
-            : <tr key={row._id} >
-                <td> <input className="tableinput" type="date" name="date" value={newRow.date} onChange={handleInputChange}/> </td>
-                <td> <input className="tableinput" type="text" name="description" value={newRow.description} onChange={handleInputChange }/> </td>
-                <td>
-                  <select style={{border:"none", outline:"none"}} className='catops' value={newRow.category} name="category" onChange={handleInputChange} >
-                    <option style={{border:"none", outline:"none"}} className='catops' value="usage">None</option>
-                  {catetories?.map((item, index)=>(<option style={{border:"none", outline:"none"}} className='catops' key={index} value={item}>{item}</option>))}
-                  </select></td>
-                <td> <input className="tableinput" type="text" name="quantity" value={newRow.quantity} onChange={handleInputChange}/> </td>
-                <td> <input className="tableinput" type="number" name="credit" value={newRow.credit} onChange={handleInputChange}/> </td>
-                <td> <input className="tableinput" type="number" name="debit" value={newRow.debit} onChange={handleInputChange}/> </td>
-                <td> <input className="tableinput" type="number" name="balance" value={newRow.balance} onChange={handleInputChange}/> </td>
-                {ibr ?
+      <div className="outterdivtable">
+        <table className="actionstableelements">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>credit</th>
+              <th>debit</th>
+              <th>balance</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            {data?.map((row, index) => (
+              editRowId !== row._id ?
+              <tr key={row._id}>
+                <td>{formateDate(row.date)}</td>
+                <td>{row.description}</td>
+                <td>{row?.category || "usage"}</td>
+                <td>{row.quantity}</td>
+                <td>{row.credit?.toLocaleString('en-US')}</td>
+                <td>{row.debit?.toLocaleString('en-US')}</td>
+                <td>{row.balance?.toLocaleString('en-US')}</td>
+                <td className="actionbuttons">
+                  <button className="tablebutton edit" onClick={() => handleEdit(row._id, row)}></button>
+                  <button className="tablebutton insertabove" onClick={() => handleInsertAbove(index)}>&#8624;</button>
+                  <button className="tablebutton" onClick={() => handleDelete(row._id)}>&#10060;</button>
+                </td>
+              </tr> 
+              : <tr key={row._id} >
+                  <td> <input className="tableinput" type="date" name="date" value={newRow.date} onChange={handleInputChange}/> </td>
+                  <td> <input className="tableinput" type="text" name="description" value={newRow.description} onChange={handleInputChange }/> </td>
                   <td>
-                    <button className="tablebutton insert" onClick={e=>handleSave(index)}>insert</button>
-                  </td> : 
-                  <td className="actionbuttons" >
-                    <button className="tablebutton save" onClick={e=>handleSave(index)}>✓</button>
-                    <button className="tablebutton insertabove" onClick={() => handleInsertAbove(index)}>&#8624;</button>
-                    <button className="tablebutton delete" onClick={() => handleDelete(row.id)}>&#10060;</button>
-                  </td>
-                }
-            </tr>
-          ))}
-           <tr key={"edit"} >
+                    <select style={{border:"none", outline:"none"}} className='catops' value={newRow.category} name="category" onChange={handleInputChange} >
+                      <option style={{border:"none", outline:"none"}} className='catops' value="usage">None</option>
+                    {catetories?.map((item, index)=>(<option style={{border:"none", outline:"none"}} className='catops' key={index} value={item}>{item}</option>))}
+                    </select></td>
+                  <td> <input className="tableinput" type="text" name="quantity" value={newRow.quantity} onChange={handleInputChange}/> </td>
+                  <td> <input className="tableinput" type="number" name="credit" value={newRow.credit} onChange={handleInputChange}/> </td>
+                  <td> <input className="tableinput" type="number" name="debit" value={newRow.debit} onChange={handleInputChange}/> </td>
+                  <td> <input className="tableinput" type="number" name="balance" value={newRow.balance} onChange={handleInputChange}/> </td>
+                  {ibr ?
+                    <td>
+                      <button className="tablebutton insert" onClick={e=>handleSave(index)}>insert</button>
+                    </td> : 
+                    <td className="actionbuttons" >
+                      <button className="tablebutton save" onClick={e=>handleSave(index)}>✓</button>
+                      <button className="tablebutton insertabove" onClick={() => handleInsertAbove(index)}>&#8624;</button>
+                      <button className="tablebutton delete" onClick={() => handleDelete(row.id)}>&#10060;</button>
+                    </td>
+                  }
+              </tr>
+            ))}
+            <tr key={"edit"} >
 
-                <td> <input className="tableinput" type="date" name="date" value={insertRow.date} onChange={set}/> </td>
-                <td> <input className="tableinput" type="text" name="description" value={insertRow.description} onChange={set}/> </td>
-                <td>
-                  <select value={insertRow.category} name="category" onChange={set} >
-                    <option className='catops' value="usage">None</option>
-                  {catetories?.map((item, index)=>(<option className='options' key={index} value={item}>{item}</option>))}
-                  </select></td>
-                <td> <input className="tableinput" type="text" name="quantity" value={insertRow.quantity} onChange={set}/> </td>
-                <td> <input className="tableinput" type="number" name="credit" value={insertRow.credit} onChange={set} /></td>
-                <td> <input className="tableinput" type="number" name="debit" value={insertRow.debit} onChange={set}/> </td>
-                <td></td>
-                <td><button className="tablebutton insert" onClick={handleInsert}>insert</button></td>
-            </tr>
-        </tbody>
-      </table>
+                  <td> <input className="tableinput" type="date" name="date" value={insertRow.date} onChange={set}/> </td>
+                  <td> <input className="tableinput" type="text" name="description" value={insertRow.description} onChange={set}/> </td>
+                  <td>
+                    <select value={insertRow.category} name="category" onChange={set} >
+                      <option className='catops' value="usage">None</option>
+                    {catetories?.map((item, index)=>(<option className='options' key={index} value={item}>{item}</option>))}
+                    </select></td>
+                  <td> <input className="tableinput" type="text" name="quantity" value={insertRow.quantity} onChange={set}/> </td>
+                  <td> <input className="tableinput" type="number" name="credit" value={insertRow.credit} onChange={set} /></td>
+                  <td> <input className="tableinput" type="number" name="debit" value={insertRow.debit} onChange={set}/> </td>
+                  <td></td>
+                  <td><button className="tablebutton insert" onClick={handleInsert}>insert</button></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

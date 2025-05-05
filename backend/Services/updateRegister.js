@@ -39,7 +39,7 @@ const addToOperations = (operations, data) =>{
 }
 
 const updateTransactions = (prevBal , record) =>{
-    if(!record || record.transactions.length < 1) return;
+    if(!record || record?.transactions?.length < 1) return;
     const {transactions} = record;
     transactions[0].balance = ((transactions[0]?.credit || 0) + prevBal) - transactions[0]?.debit || 0; 
     for(var j =1; j < transactions.length; j++){
@@ -52,12 +52,14 @@ const updateTransactions = (prevBal , record) =>{
 const Register = async (record, user) =>{
     let money_credited =0, usage =0 , cats = {};
   
-    const {month, year, transactions} = record; 
+    let {month, year, transactions} = record; 
 
     const currentUser = await Users.findById({_id:user});
     var reg = await MoneyRegister.find({user});
     sort(reg);
     const {catetories, initialAmount} = currentUser;
+
+    if(!transactions) transactions = [];
 
     transactions.forEach(item=>{
         money_credited += item.credit;

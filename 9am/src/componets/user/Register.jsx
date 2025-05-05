@@ -66,6 +66,7 @@ const excelFile = async () =>{
       </div>
         <button onClick={excelFile}> download Register</button>
         </div>
+        <div className="outterdivtable">
       <table>
         <thead>
             <tr key="head">
@@ -83,13 +84,14 @@ const excelFile = async () =>{
                 <td>{e.year}</td>
                 <td>{months[e.month-1]}</td>
                 <td>{e.money_credited?.toLocaleString('en-US')}</td>
-                {catetories?.map((item, index)=>(<td key={index}>{e.catetories && (e.catetories[item]?.toLocaleString('en-US') || 0)}</td>))}
+                {catetories?.map((item, index)=>(<td key={index}>{e.catetories ? (e.catetories[item]?.toLocaleString('en-US') || 0) : 0}</td>))}
                 <td>{e.usage?.toLocaleString('en-US')}</td>
                 <td>{e.balance?.toLocaleString('en-US')}</td>
             </tr>
       ))}
         </tbody>
     </table>
+    </div>
     </div>
   )
 }

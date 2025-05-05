@@ -19,13 +19,14 @@ router.post("/query",authenticateToken, async (req, res) => {
 
 
   router.post("/crud",authenticateToken, async (req, res)=>{
-    const { month, year, transactions} = req.body;
+    let { month, year, transactions} = req.body;
+    if(!transactions) transactions = [];
     
     const user = req.user;
     try {
       let record = await Records.findOne({ month, year, user});
       if (!record) 
-        record = new Records({ month, year, transactions: [], user});
+        record = new Records({ month, year, transactions, user});
       record.set({...record,transactions});
       await Register(record, user);
       res.status(201).send(record);

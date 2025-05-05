@@ -9,7 +9,6 @@ const Nav = () => {
         {nav.map(navItem=>(
             <li key={navItem} className='navItems'><a href={`/user/${navItem}`}>{navItem}</a></li>
           ))}
-          <li key='logout' className='navItems'><a href='/logout'>LOGOUT</a></li>
       </ul>
     </div>
   )
