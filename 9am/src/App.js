@@ -16,7 +16,7 @@ import Test from './componets/user/Test.jsx';
 import Profile from './componets/user/Profile.jsx';
 
 // export const URL = "http://localhost:5000";
-// export const URL = "https://9pm-one.vercel.app";
+export const URL = "https://9pm-one.vercel.app";
 
 const App = () => {
     
