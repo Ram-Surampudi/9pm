@@ -43,7 +43,7 @@ const Records = () => {
         setTotal(res.data.transactions.reduce((tot, current)=>tot+current.debit, 0)); 
      }
      catch(error){
-        if(error.response.status === 403 && error.response.data.exp)
+        if(error.response && (error.response.status === 403 && error.response.data.exp))
           navigate("/logout");
         setData(null);
         toast.error("No Records Found");

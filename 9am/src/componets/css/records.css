@@ -15,6 +15,11 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+div .totalvaluesclass{
+    margin-top: 20px;
+    font-size: 1.5rem;
+}
+
 .recordcontianersub p{
     font-size: 2rem;
     margin-bottom: 15px;
@@ -43,7 +48,7 @@
     color: #333;
     font: inherit;
     font-weight: 600;
-    font-size: medium;
+    font-size: 1.4rem;
     width: 100%;
     border: 1px solid #ccc;
     text-transform: uppercase;
@@ -68,7 +73,7 @@ td select {
     text-transform: uppercase;
     margin: 10px;
     padding: 3px;
-    font-size: medium;
+    font-size: 1.3rem;
 }
 
 .customtoast{
@@ -76,13 +81,14 @@ td select {
 }
 
 .exceld{
-    margin:10px auto;
+    margin:20px auto;
     /* margin: auto; */
     font: inherit;
     display: flex;
     justify-content: space-between;
     width: 60%;
     align-items: flex-end;
+    font-size: 22px;
 }
 
 .exceld > button{
@@ -100,16 +106,17 @@ table {
     width: 60%;
     border-collapse: collapse;
     margin: 30px auto;
+    font-size: 20px;
+    white-space: nowrap;
 }
 th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
     text-transform: capitalize;
 }
 th {
     background-color: #f4f4f4;
-    /* font-weight: bold; */
     text-transform: uppercase;
 }
 tr:nth-child(even) {
@@ -123,20 +130,22 @@ tr:nth-child(odd) {
 @media (max-width: 768px) {
     table {
         width: 90%;
-        font-size: 10px;
+        font-size: 19px;
+        margin-bottom: 14rem;
+        margin-top: 6px;
     }
     th, td {
-        padding: 5px;
+        padding: 7px;
         white-space: nowrap;
     }
     .recordcontianermain{
         margin-inline: 30px;
     }
     .recordcontianersub p{
-        font-size: large;
+        font-size: 25px;
     }
     .recordcontianersub label{
-        font-size:small;
+        font-size:1.2rem;
         margin: 5px;
     }
 
@@ -148,12 +157,20 @@ tr:nth-child(odd) {
         font-size: 12px;
     }
     .exceld{
+        flex-direction: column;
         width: 90%;
+        justify-content: start;
+        align-items: flex-start;
     } 
     .exceld > button{
-        font-size: 10px;
-        padding: 5px;
-        margin-top:20px;
+        font-size: 13px;
+        padding: 7px;
+        margin: 0px;
+        margin-top: 10px;
+        align-self: flex-end;
+    }
+    div .totalvaluesclass , .totalvaluesclass strong{
+        font-size: 20px;
     }
 }
 
