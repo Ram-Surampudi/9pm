@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 
 
 function saveToStore(val, data) {
-    Cookies.set(val, JSON.stringify(data), { expires: 30 });
+    Cookies.set(val, JSON.stringify(data), { expires: 100 });
 }
 
 function getFromStore(val) {
