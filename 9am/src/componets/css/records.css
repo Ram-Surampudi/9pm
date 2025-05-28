@@ -130,7 +130,7 @@ tr:nth-child(odd) {
 @media (max-width: 768px) {
     table {
         width: 90%;
-        font-size: 19px;
+        font-size: 15px;
         margin-bottom: 14rem;
         margin-top: 6px;
     }

@@ -112,6 +112,14 @@
     border: none;
   }
 
+      .outterdivtable{
+      overflow: scroll;
+      margin-inline: 15px;
+    }
+    .actionstableelements{
+      width: 70%;
+      overflow: scroll;
+    }
 
   .transcationstableh2{
     font: inherit;

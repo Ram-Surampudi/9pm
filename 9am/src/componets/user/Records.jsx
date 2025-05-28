@@ -20,6 +20,7 @@ const Records = () => {
     const [loading , setLoading] = useState(false);
     const navigate = useNavigate();
     const yearList = getFromStore("user").years || [new Date().getFullYear()];
+    yearList?.sort();
     
     const formateDate = date => {
       let d = new Date(date);

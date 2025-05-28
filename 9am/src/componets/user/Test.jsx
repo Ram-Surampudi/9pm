@@ -10,15 +10,25 @@ import { MONTHS } from "./ExcelFile";
 import { getFromStore, saveToStore } from "../cookies/cookies";
 
 const EditableTable = () => {
+
+  const presentyear = new Date().getFullYear();
+  const presentmonth = new Date().getMonth()+1;
   
-  const [year , setYear] = useState(new Date().getFullYear());
-  const [month , setMonth] = useState(new Date().getMonth()+1);
-  const [tempYear , setTempYear] = useState(year);
-  const [tempMonth , setTempMonth] = useState(month);
+  const [year , setYear] = useState(presentyear);
+  const [month , setMonth] = useState(presentmonth);
+  const [tempYear , setTempYear] = useState(presentyear);
+  const [tempMonth , setTempMonth] = useState(presentmonth);
+
+  const calDate = ()=>{
+   if(year === presentyear && month === presentmonth){
+    return `${tempYear}-${String(tempMonth).padStart(2,'0')}-${String(new Date().getDate()).padStart(2,'0')}`;
+   }
+   return `${tempYear}-${String(tempMonth).padStart(2,'0')}-01`;
+  }
 
   const temp = {
     _id: "",
-    date: `${tempYear}-${String(tempMonth).padStart(2,'0')}-01`,
+    date: calDate(),
     description: "",
     quantity: "",
     credit: "",
@@ -30,6 +40,7 @@ const EditableTable = () => {
   let localuser = getFromStore("user");
 
   let {catetories, years} = localuser;
+  
 
   const [yearList , setYearList] = useState(years);  
 
@@ -45,8 +56,11 @@ const EditableTable = () => {
   const navigate = useNavigate();
 
   const set = e => setInsertRow({...insertRow, [e.target.name]:e.target.value});
-  const handleDelete = async (id) =>{
+  const handleDelete = async (id, index) =>{
     data = data.filter((row) => row._id !== id);
+    for(var i =index===0 ? index : index-1 ; i<data.length; i++){
+        calculateBalance(data[i], i);
+      }
     setData(data);
     if(toggle) await handleUpdatedb();
   } 
@@ -82,7 +96,7 @@ const EditableTable = () => {
       data = [insertRow]
       setData(data);
     } 
-    setInsertRow({...temp, date:`${tempYear}-${String(tempMonth).padStart(2,'0')}-01`});
+    setInsertRow({...temp, date:calDate()});
     setTotal(data?.reduce((tot, current)=>tot+parseInt(current.debit || 0), 0) || 0);
     if(toggle) await handleUpdatedb();
   }
@@ -93,6 +107,10 @@ const EditableTable = () => {
   };
 
   const handleInsertAbove = (index) => {
+    if(editRowId !== null){
+      toast.error("Please save the current row before inserting a new one");
+      return;
+    }
     setLoading(true);
     const _id = new Date();
     setData((prevData) => {
@@ -108,7 +126,6 @@ const EditableTable = () => {
 
   const handleEdit = (_id, row) => {
     setEditRowId(_id);
-    console.log(row.date);
     setNewRow({...row, date:row.date.split("T")[0]});
   };
 
@@ -122,7 +139,6 @@ const EditableTable = () => {
       }
       setData(data);
       setNewRow(temp);
-      console.log(toggle);
       
       if(toggle) await handleUpdatedb();
   };
@@ -134,8 +150,6 @@ const EditableTable = () => {
     }
     setLoading(true);
     try{
-      console.log(data);
-      
       data?.forEach(item => {
         delete item._id;
         item.credit = parseInt(item.credit);
@@ -147,11 +161,9 @@ const EditableTable = () => {
         saveToStore("user", {...localuser, years});
       }
       const token = getFromStore("information");
-      console.log(data);
       
        const res = await axios.post(`${URL}/api/records/crud`,{month:tempMonth, year:tempYear, balance, transactions :data}, {headers: {Authorization:token,},});
        toast.success("Updated Sucessfully");
-       console.log(res?.data.transactions);
        setData(res?.data.transactions);
     }
     catch(error){
@@ -169,7 +181,7 @@ const EditableTable = () => {
     }
     setTempYear(year);
     setTempMonth(month);
-    setInsertRow({...temp, date:`${year}-${String(month).padStart(2,'0')}-01`});
+    setInsertRow({...temp, date:calDate()});
     setLoading(true);
     const token = getFromStore("information");
     try{
@@ -187,8 +199,13 @@ const EditableTable = () => {
     }
     setLoading(false);
   };
+  
 
-  useEffect(()=>{getRecords()},[]);
+  useEffect(()=>{
+    getRecords();
+    yearList.sort();
+
+  },[]);
 
   return (
     <div>
@@ -197,11 +214,11 @@ const EditableTable = () => {
         <div className='recordcontianersub'>
           <p>Money Resigter</p>
       <div>
-      <label>Year:</label>
+      <label>Year(optional):</label>
         <select value={year} onChange={(e) => setYear(parseInt(e.target.value))}>
           {Array.from(yearList).map((item, index)=>(<option key={index} value={item}>{item}</option>))}
           </select>
-          <label>Year(optional):</label>
+          <label>Year:</label>
           <input className="yearinputele" type="number" min="2000" value={year} onChange={(e)=>setYear(parseInt(e.target.value))} max="2200"></input>
       </div>
       <div>
@@ -267,7 +284,7 @@ const EditableTable = () => {
                 <td className="actionbuttons">
                   <button className="tablebutton edit" onClick={() => handleEdit(row._id, row)}></button>
                   <button className="tablebutton insertabove" onClick={() => handleInsertAbove(index)}>&#8624;</button>
-                  <button className="tablebutton" onClick={() => handleDelete(row._id)}>&#10060;</button>
+                  <button className="tablebutton" onClick={() => handleDelete(row._id, index)}>&#10060;</button>
                 </td>
               </tr> 
               : <tr key={row._id} >
@@ -289,7 +306,7 @@ const EditableTable = () => {
                     <td className="actionbuttons" >
                       <button className="tablebutton save" onClick={e=>handleSave(index)}>✓</button>
                       <button className="tablebutton insertabove" onClick={() => handleInsertAbove(index)}>&#8624;</button>
-                      <button className="tablebutton delete" onClick={() => handleDelete(row.id)}>&#10060;</button>
+                      <button className="tablebutton delete" onClick={() => handleDelete(row.id, index)}>&#10060;</button>
                     </td>
                   }
               </tr>

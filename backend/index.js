@@ -17,8 +17,8 @@ require('dotenv').config();
 app.use(cors());
 
 app.use(cors({
-  origin: "https://9pm-register.vercel.app",
-  // origin: "", 
+  // origin: "https://9pm-register.vercel.app",
+  origin: "", 
   methods: "GET,POST,PUT,DELETE", 
   credentials: true
 }));
