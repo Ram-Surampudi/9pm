@@ -51,7 +51,7 @@ const EditableTable = () => {
   const [insertRow, setInsertRow] = useState(temp);
   const [editRowId, setEditRowId] = useState(null);
   const [total, setTotal] = useState(0);
-  var balance =0;
+  const [balance, setBalance] = useState(0);
   const [loading , setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -188,10 +188,10 @@ const EditableTable = () => {
       const res = await axios.post(`${URL}/api/records/query`,{month,year}, {headers: {authorization:token,}});
       setData(res?.data?.transactions); 
       setTotal(res?.data?.transactions?.reduce((tot, current)=>tot+current.debit, 0));
-      balance = res?.data?.balance;
+      setBalance(res?.data?.balance);
    }
    catch(error){
-    balance =0;
+    setBalance(0);
     setTotal(0);
     setData(null);
     if(error.response.status === 403 && error.response.data.exp)
